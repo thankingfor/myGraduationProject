@@ -1,12 +1,14 @@
 # IDEA
 .idea
 
+.mvn
 *.iml
 
 target
 out
 
-
+# git
+.git
 
 # Compiled class file
 *.class
