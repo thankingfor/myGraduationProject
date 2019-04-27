@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.mapper.CourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="vip.bzsy.model.Course">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="faculity_id" property="faculityId"/>
+        <result column="credit" property="credit"/>
+        <result column="created" property="created"/>
+        <result column="semester" property="semester"/>
+        <result column="proptype" property="proptype"/>
+        <result column="teacher_id" property="teacherId"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, `name`, faculity_id, credit, created, semester, proptype, teacher_id,status
+    </sql>
+
+    <select id="getTeacherClass" resultType="vip.bzsy.model.vo.GetTeacherClassRes">
+        SELECT p.id id,cc.id courseId ,cr.id classroomId,u.id teacherId,p.`day` `day`,
+        p.time `time`,cr.location classroom,cc.`name` courseName,u.`name` teacherName
+        FROM classroom cr,`user` u,course cc,perclass p
+        WHERE u.id=#{teacherId}
+            AND u.id = cc.teacher_id
+            AND p.course_id = cc.id
+            AND p.classrom_id = cr.id
+            AND u.deleted = 0
+            AND p.deteled = 0
+            AND cc.`status` = 1
+    </select>
+
+    <select id="getStudentClass" resultType="vip.bzsy.model.vo.GetTeacherClassRes">
+SELECT n.id id,n.courseId courseId,n.classroomId classroomId,n.teacherId teacherId,n.`day` `day`,n.time `time`,n.classroom classroom,n.courseName courseName,tea.`name` teacherName
+FROM `user` tea , (SELECT p.id id,cc.id courseId ,cr.id classroomId,u.id studentId,p.`day` `day`,
+         p.time `time`,cr.location classroom,cc.`name` courseName,u.`name` studentName,cc.teacher_id teacherId
+         FROM classroom cr,`user` u,course cc,perclass p,choose ch
+         WHERE u.id=#{studentId}
+             AND u.id = ch.student_id
+ 						 AND ch.course_id = cc.id
+ 						 AND p.course_id = cc.id
+             AND p.classrom_id = cr.id
+             AND u.deleted = 0
+             AND p.deteled = 0
+             AND cc.`status` = 1) n
+WHERE tea.id = n.teacherId
+    </select>
+    
+    <select id="getChooseCourseList" resultType="vip.bzsy.model.vo.GetTeacherClassRes">
+                SELECT p.id id,cc.id courseId ,cr.id classroomId,u.id teacherId,p.`day` `day`,
+        p.time `time`,cr.location classroom,cc.`name` courseName,u.`name` teacherName
+        FROM classroom cr,`user` u,course cc,perclass p
+        WHERE cc.id=#{courseId}
+            AND u.id = cc.teacher_id
+            AND p.course_id = cc.id
+            AND p.classrom_id = cr.id
+            AND u.deleted = 0
+            AND p.deteled = 0
+            AND cc.`status` = 1
+    </select>
+
+    <select id="getStudentGrade" resultType="vip.bzsy.model.vo.StudentGradeRes">
+        SELECT cs.id id,cc.id courseId,cc.name courseName,cs.grade grade,cc.credit credit FROM choose cs,course cc
+        WHERE cs.student_id = #{studentId} and cc.id = cs.course_id and cc.semester = #{semester}
+    </select>
+
+</mapper>

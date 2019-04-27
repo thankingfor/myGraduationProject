@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.mapper.ClassroomMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="vip.bzsy.model.Classroom">
+        <id column="id" property="id"/>
+        <result column="location" property="location"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, location
+    </sql>
+
+    <!---->
+    <select id="getOneEmptyClassRoom" resultType="vip.bzsy.model.Classroom">
+        SELECT * FROM classroom
+        WHERE location not in (
+        SELECT c.location FROM perclass p , classroom c
+        WHERE p.classrom_id = c.id and p.`day`= #{day} AND p.time = #{time}
+        ) LIMIT 1
+    </select>
+</mapper>

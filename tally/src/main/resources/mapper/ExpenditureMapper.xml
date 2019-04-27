@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.mapper.ExpenditureMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="vip.bzsy.model.Expenditure">
+        <id column="id" property="id"/>
+        <result column="deleted" property="deleted"/>
+        <result column="uid" property="uid"/>
+        <result column="money" property="money"/>
+        <result column="sort_id" property="sortId"/>
+        <result column="way" property="way"/>
+        <result column="time" property="time"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, deleted, uid, money, sort_id, way, `time`, remark
+    </sql>
+
+    <!--Integer getTotalCast(Integer userId);-->
+    <select id="getTotalCast" resultType="decimal">
+        SELECT SUM(money) FROM expenditure
+        WHERE uid = #{userId}
+    </select>
+
+    <!--List<BigDecimal> getTotalCastList();-->
+    <select id="getTotalCastList" resultType="decimal">
+        SELECT SUM(money)  FROM expenditure GROUP BY uid
+    </select>
+
+    <!--Map<String,Object> mostWay(Integer userId);-->
+    <select id="mostWay" resultType="java.util.HashMap">
+        SELECT MAX(a.count) num ,a.way FROM
+        (
+        SELECT COUNT(way) count,way   FROM expenditure
+        WHERE uid = #{userId}
+        GROUP BY way
+        ) a
+
+    </select>
+    
+    <!--List<Integer> getUidList();-->
+    <select id="getUidList" resultType="integer">
+        SELECT distinct  uid  FROM expenditure
+    </select>
+</mapper>

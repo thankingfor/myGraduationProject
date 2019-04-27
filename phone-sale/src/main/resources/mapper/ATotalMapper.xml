@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.mapper.ATotalMapper">
+    <!--void recharge(Integer uid);-->
+    <update id="recharge" >
+        UPDATE x_user
+        SET `money` = `money` + #{money}
+        WHERE id = #{uid}
+    </update>
+
+    <!--List<CartVo> getCartList(Integer uid);-->
+    <select id="getCartList" resultType="vip.bzsy.model.vo.CartVo">
+        SELECT o.id id,i.id itemId,i.title title,i.cover cover,o.count `count`,o.color color,o.sort sort,o.price price
+        FROM  x_item i,x_cart o
+        WHERE o.item_id=i.id AND o.uid=#{uid} AND o.deleted=0 AND i.deleted=0
+        ORDER BY o.time DESC
+    </select>
+</mapper>

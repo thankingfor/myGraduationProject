@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vip.bzsy.novelshop.mapper.BsUserMapper" >
+  <resultMap id="BaseResultMap" type="vip.bzsy.novelshop.model.BsUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="vp" property="vp" jdbcType="INTEGER" />
+    <result column="ban" property="ban" jdbcType="INTEGER" />
+    <result column="like" property="like" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, `identity`, `name`, account, password, vp, ban, `like`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="vip.bzsy.novelshop.model.BsUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bs_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bs_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bs_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="vip.bzsy.novelshop.model.BsUserExample" >
+    delete from bs_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="vip.bzsy.novelshop.model.BsUser" >
+    insert into bs_user (id, `identity`, `name`,
+      account, password, vp, 
+      ban, `like``)
+    values (#{id,jdbcType=INTEGER}, #{identity,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{vp,jdbcType=INTEGER}, 
+      #{ban,jdbcType=INTEGER}, #{like,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vip.bzsy.novelshop.model.BsUser" >
+    insert into bs_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="identity != null" >
+        `identity`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="vp != null" >
+        vp,
+      </if>
+      <if test="ban != null" >
+        ban,
+      </if>
+      <if test="like != null" >
+        `like`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="vp != null" >
+        #{vp,jdbcType=INTEGER},
+      </if>
+      <if test="ban != null" >
+        #{ban,jdbcType=INTEGER},
+      </if>
+      <if test="like != null" >
+        #{like,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="vip.bzsy.novelshop.model.BsUserExample" resultType="java.lang.Integer" >
+    select count(*) from bs_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update bs_user
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.identity != null" >
+        `identity` = #{record.identity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null" >
+        account = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vp != null" >
+        vp = #{record.vp,jdbcType=INTEGER},
+      </if>
+      <if test="record.ban != null" >
+        ban = #{record.ban,jdbcType=INTEGER},
+      </if>
+      <if test="record.like != null" >
+        `like` = #{record.like,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update bs_user
+    set id = #{record.id,jdbcType=INTEGER},
+      `identity` = #{record.identity,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      vp = #{record.vp,jdbcType=INTEGER},
+      ban = #{record.ban,jdbcType=INTEGER},
+      `like` = #{record.like,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="vip.bzsy.novelshop.model.BsUser" >
+    update bs_user
+    <set >
+      <if test="identity != null" >
+        `identity` = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="vp != null" >
+        vp = #{vp,jdbcType=INTEGER},
+      </if>
+      <if test="ban != null" >
+        ban = #{ban,jdbcType=INTEGER},
+      </if>
+      <if test="like != null" >
+        `like` = #{like,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vip.bzsy.novelshop.model.BsUser" >
+    update bs_user
+    set `identity` = #{identity,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      vp = #{vp,jdbcType=INTEGER},
+      ban = #{ban,jdbcType=INTEGER},
+      `like` = #{like,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.mapper.DormroomMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="vip.bzsy.model.Dormroom">
+        <id column="id" property="id" />
+        <result column="peopleNum" property="peopleNum" />
+        <result column="getUpTime" property="getUpTime" />
+        <result column="sleepTime" property="sleepTime" />
+        <result column="game" property="game" />
+        <result column="read" property="read" />
+        <result column="video" property="video" />
+        <result column="sport" property="sport" />
+        <result column="music" property="music" />
+        <result column="religion" property="religion" />
+        <result column="quite" property="quite" />
+        <result column="noise" property="noise" />
+        <result column="sound" property="sound" />
+        <result column="stay" property="stay" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, peopleNum, getUpTime, sleepTime, game, read, video, sport, music, religion, quite, noise, sound, stay, deleted
+    </sql>
+
+</mapper>

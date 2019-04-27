@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vip.bzsy.novelshop.mapper.BsNovMapper" >
+  <resultMap id="BaseResultMap" type="vip.bzsy.novelshop.model.BsNov" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="novelName" property="novelname" jdbcType="VARCHAR" />
+    <result column="editorName" property="editorname" jdbcType="VARCHAR" />
+    <result column="editorId" property="editorid" jdbcType="INTEGER" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="clickNum" property="clicknum" jdbcType="INTEGER" />
+    <result column="commentNum" property="commentnum" jdbcType="INTEGER" />
+    <result column="downloadNum" property="downloadnum" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, novelName, editorName, editorId, introduction, clickNum, commentNum, downloadNum, 
+    sort, price, cover, `time`
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="vip.bzsy.novelshop.model.BsNovExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bs_nov
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bs_nov
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bs_nov
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="vip.bzsy.novelshop.model.BsNovExample" >
+    delete from bs_nov
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="vip.bzsy.novelshop.model.BsNov" >
+    insert into bs_nov (id, novelName, editorName, 
+      editorId, introduction, clickNum, 
+      commentNum, downloadNum, sort, 
+      price, cover, `time`)
+    values (#{id,jdbcType=INTEGER}, #{novelname,jdbcType=VARCHAR}, #{editorname,jdbcType=VARCHAR}, 
+      #{editorid,jdbcType=INTEGER}, #{introduction,jdbcType=VARCHAR}, #{clicknum,jdbcType=INTEGER}, 
+      #{commentnum,jdbcType=INTEGER}, #{downloadnum,jdbcType=INTEGER}, #{sort,jdbcType=VARCHAR}, 
+      #{price,jdbcType=INTEGER}, #{cover,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vip.bzsy.novelshop.model.BsNov" >
+    insert into bs_nov
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="novelname != null" >
+        novelName,
+      </if>
+      <if test="editorname != null" >
+        editorName,
+      </if>
+      <if test="editorid != null" >
+        editorId,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="clicknum != null" >
+        clickNum,
+      </if>
+      <if test="commentnum != null" >
+        commentNum,
+      </if>
+      <if test="downloadnum != null" >
+        downloadNum,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="time != null" >
+        `time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="novelname != null" >
+        #{novelname,jdbcType=VARCHAR},
+      </if>
+      <if test="editorname != null" >
+        #{editorname,jdbcType=VARCHAR},
+      </if>
+      <if test="editorid != null" >
+        #{editorid,jdbcType=INTEGER},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="clicknum != null" >
+        #{clicknum,jdbcType=INTEGER},
+      </if>
+      <if test="commentnum != null" >
+        #{commentnum,jdbcType=INTEGER},
+      </if>
+      <if test="downloadnum != null" >
+        #{downloadnum,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="cover != null" >
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="vip.bzsy.novelshop.model.BsNovExample" resultType="java.lang.Integer" >
+    select count(*) from bs_nov
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update bs_nov
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.novelname != null" >
+        novelName = #{record.novelname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.editorname != null" >
+        editorName = #{record.editorname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.editorid != null" >
+        editorId = #{record.editorid,jdbcType=INTEGER},
+      </if>
+      <if test="record.introduction != null" >
+        introduction = #{record.introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clicknum != null" >
+        clickNum = #{record.clicknum,jdbcType=INTEGER},
+      </if>
+      <if test="record.commentnum != null" >
+        commentNum = #{record.commentnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.downloadnum != null" >
+        downloadNum = #{record.downloadnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=INTEGER},
+      </if>
+      <if test="record.cover != null" >
+        cover = #{record.cover,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null" >
+        `time` = #{record.time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update bs_nov
+    set id = #{record.id,jdbcType=INTEGER},
+      novelName = #{record.novelname,jdbcType=VARCHAR},
+      editorName = #{record.editorname,jdbcType=VARCHAR},
+      editorId = #{record.editorid,jdbcType=INTEGER},
+      introduction = #{record.introduction,jdbcType=VARCHAR},
+      clickNum = #{record.clicknum,jdbcType=INTEGER},
+      commentNum = #{record.commentnum,jdbcType=INTEGER},
+      downloadNum = #{record.downloadnum,jdbcType=INTEGER},
+      sort = #{record.sort,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=INTEGER},
+      cover = #{record.cover,jdbcType=VARCHAR},
+      `time` = #{record.time,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="vip.bzsy.novelshop.model.BsNov" >
+    update bs_nov
+    <set >
+      <if test="novelname != null" >
+        novelName = #{novelname,jdbcType=VARCHAR},
+      </if>
+      <if test="editorname != null" >
+        editorName = #{editorname,jdbcType=VARCHAR},
+      </if>
+      <if test="editorid != null" >
+        editorId = #{editorid,jdbcType=INTEGER},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="clicknum != null" >
+        clickNum = #{clicknum,jdbcType=INTEGER},
+      </if>
+      <if test="commentnum != null" >
+        commentNum = #{commentnum,jdbcType=INTEGER},
+      </if>
+      <if test="downloadnum != null" >
+        downloadNum = #{downloadnum,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        `time` = #{time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vip.bzsy.novelshop.model.BsNov" >
+    update bs_nov
+    set novelName = #{novelname,jdbcType=VARCHAR},
+      editorName = #{editorname,jdbcType=VARCHAR},
+      editorId = #{editorid,jdbcType=INTEGER},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      clickNum = #{clicknum,jdbcType=INTEGER},
+      commentNum = #{commentnum,jdbcType=INTEGER},
+      downloadNum = #{downloadnum,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=VARCHAR},
+      price = #{price,jdbcType=INTEGER},
+      cover = #{cover,jdbcType=VARCHAR},
+      `time` = #{time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!--List<BsNov> selectBySortRun(@Param("sort") String sort, @Param("size") int size);-->
+  <select id="selectBySortRun" resultType="vip.bzsy.novelshop.model.BsNov">
+      SELECT * FROM `bs_nov`
+      WHERE sort = #{sort}
+      ORDER BY rand() limit #{size}
+  </select>
+
+  <!--List<GetNewPublishRes> getNewPublish();-->
+  <select id="getNewPublish" resultType="vip.bzsy.novelshop.model.vo.GetNewPublishRes">
+    SELECT id,cover,novelName,introduction FROM bs_nov
+    ORDER BY `time` DESC
+  </select>
+</mapper>

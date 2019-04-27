@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.lowsearce.mapper.LawMapper">
+
+    <!--List<Law> getLaw(Law law);-->
+    <select id="getLaw" resultType="vip.bzsy.lowsearce.model.Law">
+      SELECT * FROM law
+      WHERE 1=1
+      <if test="level!=null"> and `level` LIKE "%"#{level}"%" </if>
+      <if test="department!=null"> and department LIKE "%"#{department}"%" </if>
+      <if test="lowSort!=null"> and  lowSort LIKE "%"#{lowSort}"%" </if>
+      <if test="isInvalid!=null"> and  isInvalid = #{isInvalid} </if>
+      <if test="isInvalidPart!=null"> and  isInvalidPart = #{isInvalidPart} </if>
+      <if test="isAlter!=null"> and  isAlter = #{isAlter} </if>
+      <if test="isNowInvalid!=null"> and  carryTime &lt;= now()  </if>
+      <if test="isNoInvalid!=null"> and  carryTime &gt; now() </if>
+    </select>
+
+    <!--List<Law> searchLaw(LawSearch lawSearch);-->
+    <select id="searchLaw" resultType="vip.bzsy.lowsearce.model.Law">
+        SELECT * FROM law
+        WHERE 1=1
+        <if test="level!=null"> and `level` LIKE "%"#{level}"%" </if>
+        <if test="department!=null"> and department LIKE "%"#{department}"%" </if>
+        <if test="lowSort!=null"> and  lowSort LIKE "%"#{lowSort}"%" </if>
+        <if test="time!=null">
+            <if test="time==3"> and  isInvalid = 1 </if>
+            <if test="time==4"> and  isInvalidPart = 1 </if>
+            <if test="time==5"> and  isAlter = 1 </if>
+            <if test="time==1"> and  carryTime &lt;= now()  </if>
+            <if test="time==2"> and  carryTime &gt; now() </if>
+        </if>
+        <if test="search!=null">
+            <if test="search==1"> and  title LIKE "%"#{key}"%"  </if>
+            <if test="search==2"> and ( title LIKE "%"#{key}"%" OR content LIKE "%"#{key}"%" )  </if>
+        </if>
+        <if test="filter!=null">
+            and filter in
+            <foreach collection="filter"  item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    
+    <!--List<GetFeedbackRes> getFeedback();-->
+    <select id="getFeedback" resultType="vip.bzsy.lowsearce.model.vo.GetFeedbackRes">
+        SELECT id,feedbackMsg content,account FROM `feedback`
+    </select>
+</mapper>

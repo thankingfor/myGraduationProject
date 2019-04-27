@@ -1,0 +1,18 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+
+zuul:
+  ignored-services: "*"  #禁用直接通过为服务名称访问
+  prefix: /xk   #统一的公共前缀
+  routes:
+    myservice:
+      serviceId: eureka-client-service01
+      path: /service01/**
+      sensitiveHeaders: Cookie,Set-Cookie

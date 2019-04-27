@@ -1,0 +1,39 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: eureka-client-service01
+  datasource:
+    url: jdbc:mysql://47.95.196.58:3306/xuanke?useUnicode=true&characterEncoding=UTF-8
+    username: xuanke
+    password: xuanke
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+
+audience:
+  clientId: 098f6bcd4621d373cade4e832627b4f6
+  base64Secret: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY
+  name: xuanke
+  expiresSecond: 720000000
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+logging:
+  level:
+    vip.bzsy: debug
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: vip.bzsy.model
+
+

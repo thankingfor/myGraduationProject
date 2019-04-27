@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Class-Path: hibernate-validator-6.0.14.Final.jar log4j-api-2.11.2.jar 
+ spring-boot-starter-tomcat-2.1.3.RELEASE.jar log4j-to-slf4j-2.11.2.ja
+ r commons-codec-1.9.jar jsqlparser-1.0.jar jackson-datatype-jdk8-2.9.
+ 8.jar commons-lang3-3.1.jar druid-1.0.9.jar jconsole.jar pagehelper-s
+ pring-boot-autoconfigure-1.2.5.jar spring-web-5.1.5.RELEASE.jar slf4j
+ -api-1.7.25.jar jul-to-slf4j-1.7.25.jar spring-tx-5.1.5.RELEASE.jar j
+ ackson-datatype-jsr310-2.9.8.jar mybatis-spring-boot-starter-2.0.0.ja
+ r spring-context-5.1.5.RELEASE.jar pagehelper-5.1.4.jar mybatis-3.5.0
+ .jar tomcat-embed-el-9.0.16.jar java-jwt-3.3.0.jar spring-boot-starte
+ r-logging-2.1.3.RELEASE.jar validation-api-2.0.1.Final.jar mybatis-sp
+ ring-boot-autoconfigure-2.0.0.jar spring-expression-5.1.5.RELEASE.jar
+  javax.annotation-api-1.3.2.jar tomcat-embed-websocket-9.0.16.jar spr
+ ing-jcl-5.1.5.RELEASE.jar mysql-connector-java-5.1.38.jar spring-boot
+ -starter-2.1.3.RELEASE.jar spring-boot-starter-json-2.1.3.RELEASE.jar
+  spring-boot-starter-jdbc-2.1.3.RELEASE.jar snakeyaml-1.23.jar tomcat
+ -embed-core-9.0.16.jar pagehelper-spring-boot-starter-1.2.5.jar jacks
+ on-annotations-2.9.0.jar logback-core-1.2.3.jar spring-aop-5.1.5.RELE
+ ASE.jar HikariCP-3.2.0.jar logback-classic-1.2.3.jar spring-beans-5.1
+ .5.RELEASE.jar jackson-module-parameter-names-2.9.8.jar jackson-mappe
+ r-asl-1.9.13.jar classmate-1.4.0.jar jboss-logging-3.3.2.Final.jar sp
+ ring-webmvc-5.1.5.RELEASE.jar spring-boot-devtools-2.1.3.RELEASE.jar 
+ lombok-1.18.6.jar spring-boot-starter-web-2.1.3.RELEASE.jar mybatis-s
+ pring-2.0.0.jar jackson-core-2.9.8.jar spring-boot-autoconfigure-2.1.
+ 3.RELEASE.jar jackson-core-asl-1.9.13.jar jackson-databind-2.9.8.jar 
+ jjwt-0.9.0.jar spring-core-5.1.5.RELEASE.jar spring-boot-2.1.3.RELEAS
+ E.jar spring-jdbc-5.1.5.RELEASE.jar tools.jar
+Main-Class: vip.bzsy.novelshop.BookRecommentApplication
+
