@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lyf
- * @since 2019-04-24
+ * @since 2019-04-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,6 +40,11 @@ public class User extends Model<User> {
     private Integer deleted;
 
     private String account;
+
+    /**
+     * 默认0未审核 审核为1
+     */
+    private Integer okornot;
 
 
     @Override

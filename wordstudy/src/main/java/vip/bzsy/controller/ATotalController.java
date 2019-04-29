@@ -75,7 +75,10 @@ public class ATotalController extends BaseController {
                 .eq("password", Md5Utils.encryptPassword(user.getPassword(), SALT, PASS_COUNT))
         );
         if (CommonUtils.isEmpty(one)) {
-            return CommonResponse.fail(CommonStatus.USER_LOGIN_ACCOUNT_FAULT);
+            return new CommonResponse(2,"账号不存在");
+        }
+        if (one.getOkornot()==0){
+            return new CommonResponse(3, "账号正在审核");
         }
         //jwt操作
         map.clear();
@@ -239,6 +242,7 @@ public class ATotalController extends BaseController {
             map.put("uid", user.getId());
             map.put("name", user.getName());
             map.put("account", user.getAccount());
+            map.put("status",user.getOkornot());
             listMap.add(map);
         });
         return CommonResponse.success(listMap);
@@ -304,4 +308,46 @@ public class ATotalController extends BaseController {
         return CommonResponse.success();
     }
 
+    /**
+     * 3.6 删除用户
+     * url: /deleteUser
+     */
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public CommonResponse deleteUser(User user) {
+        user.deleteById();
+        return CommonResponse.success();
+    }
+
+    /**
+     * 3.7 获取待审核用户
+     * url: /getWaitUser
+     */
+    @RequestMapping(value = "/getWaitUser", method = RequestMethod.GET)
+    public CommonResponse getWaitUser() {
+        List<User> list = userService.list(new QueryWrapper<User>()
+                .eq("identity", "user").eq("okornot",0));
+        List listMap = new ArrayList();
+        list.forEach(user -> {
+            Map<String,Object> map = new HashMap<>();
+            map.put("uid", user.getId());
+            map.put("name", user.getName());
+            map.put("account", user.getAccount());
+            map.put("status",user.getOkornot());
+            listMap.add(map);
+        });
+        return CommonResponse.success(listMap);
+    }
+
+    /**
+     * 3.8 通过审核
+     * url: /access
+     */
+    @RequestMapping(value = "/access", method = RequestMethod.GET)
+    public CommonResponse access(User user) {
+        boolean updateById = user.setOkornot(1).updateById();
+        if (!updateById){
+            return CommonResponse.fail("审核失败");
+        }
+        return CommonResponse.success();
+    }
 }

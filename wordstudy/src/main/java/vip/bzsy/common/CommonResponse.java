@@ -28,6 +28,7 @@ public class CommonResponse implements Serializable {
 
     public CommonResponse(Integer code,String msg){
         this.code = code;
+        this.msg = msg;
     }
 
     public CommonResponse(Integer code,String msg,Object data){

@@ -10,11 +10,12 @@
         <result column="identity" property="identity" />
         <result column="deleted" property="deleted" />
         <result column="account" property="account" />
+        <result column="okornot" property="okornot" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, password, identity, deleted, account
+        id, name, password, identity, deleted, account, okornot
     </sql>
 
 </mapper>
