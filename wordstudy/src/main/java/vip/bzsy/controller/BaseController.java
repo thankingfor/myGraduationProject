@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vip.bzsy.common.Audience;
-import vip.bzsy.service.StatusService;
-import vip.bzsy.service.UserService;
-import vip.bzsy.service.WordService;
+import vip.bzsy.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -32,6 +30,18 @@ public class BaseController {
         Integer userId = (Integer) claims.get("userId");
         return userId;
     }
+
+    @Autowired
+    public OkornotService okornotService;
+    @Autowired
+    public StudyerrService studyerrService;
+    @Autowired
+    public StudyokService studyokService;
+    @Autowired
+    public StudywriteService studywriteService;
+    @Autowired
+    public UnitService unitService;
+
 
     @Autowired
     public StatusService statusService;

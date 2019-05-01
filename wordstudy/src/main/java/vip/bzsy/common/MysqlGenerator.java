@@ -16,8 +16,9 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class MysqlGenerator {
 
     public static void main(String[] args){
+        String path2 = "E:/Study/IDEA/space/myGraduationProject/wordstudy/src/main/java";
         String path1="D:\\java\\IdeaSpace\\myGraduationProject\\wordstudy\\src\\main\\java";
-        //myGenerator(path1,"user");
+        //myGenerator(path2,"unit","okornot","studyok","studywrite","studyerr");
     }
 
     /**
@@ -25,7 +26,7 @@ public class MysqlGenerator {
      * @param path 模板路径
      * @param table 表名
      */
-    private static void myGenerator(String path,String table){
+    private static void myGenerator(String path,String... table){
         // 1.全局配置
         GlobalConfig gc = new GlobalConfig();
         gc.setActiveRecord(true)//是否支持AR模式

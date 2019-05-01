@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import vip.bzsy.common.*;
-import vip.bzsy.model.Status;
-import vip.bzsy.model.User;
-import vip.bzsy.model.Word;
+import vip.bzsy.model.*;
 import vip.bzsy.model.vo.UserVo;
 import vip.bzsy.model.vo.WordVo;
 
@@ -55,6 +53,7 @@ public class ATotalController extends BaseController {
             user.setIdentity("user");
         }
         boolean save = userService.save(user);
+        new Okornot().setUid(user.getId()).insert();
         if (!save) {
             return CommonResponse.fail(CommonStatus.FAULT);
         }
@@ -188,6 +187,13 @@ public class ATotalController extends BaseController {
             if (!add)
                 return CommonResponse.fail("单词状态添加失败！");
         }
+        if (status.getStatus()==1){
+            new Studyok().setWordId(status.getId()).setUid(userId).insert();
+        } else if (status.getStatus()==2){
+            new Studywrite().setWordId(status.getId()).setUid(userId).insert();
+        } else if (status.getStatus()==3){
+            new Studyerr().setWordId(status.getId()).setUid(userId).insert();
+        }
         return CommonResponse.success();
     }
 
@@ -279,6 +285,7 @@ public class ATotalController extends BaseController {
         if (!insert){
             return CommonResponse.fail("单词添加失败！");
         }
+        new Unit().setUnit(word.getUnit()).setWordId(word.getId()).insert();
         return CommonResponse.success();
     }
 
@@ -348,6 +355,8 @@ public class ATotalController extends BaseController {
         if (!updateById){
             return CommonResponse.fail("审核失败");
         }
+        Okornot uid = okornotService.getOne(new QueryWrapper<Okornot>().eq("uid", user.getId()));
+        uid.setOkornot(1).updateById();
         return CommonResponse.success();
     }
 }
