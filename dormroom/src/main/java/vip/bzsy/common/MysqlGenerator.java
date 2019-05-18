@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class MysqlGenerator {
 
     public static void main(String[] args){
-        String path1="D:\\java\\IdeaSpace\\dormroom\\src\\main\\java";
+        String path1="E:\\Study\\IDEA\\space\\myGraduationProject\\dormroom\\src\\main\\java";
         //myGenerator(path1,"user");
     }
 

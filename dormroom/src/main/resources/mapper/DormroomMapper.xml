@@ -26,4 +26,16 @@
         id, peopleNum, getUpTime, sleepTime, game, read, video, sport, music, religion, quite, noise, sound, stay, deleted
     </sql>
 
+    <update id="setRommNullByUid" >
+        UPDATE `user` SET
+        room = NULL
+        WHERE  id = #{uid}
+    </update>
+
+    <update id="removeMember" >
+        UPDATE dormroom  SET
+        peopleNum = peopleNum - 1
+        WHERE id = #{roomId}
+    </update>
+
 </mapper>

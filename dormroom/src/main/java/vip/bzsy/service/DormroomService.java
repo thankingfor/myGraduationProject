@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface DormroomService extends IService<Dormroom> {
 
+    void removeMember(Integer uid, Integer roomId);
 }

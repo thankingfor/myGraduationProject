@@ -1,5 +1,7 @@
 package vip.bzsy.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import vip.bzsy.model.Dormroom;
 import vip.bzsy.mapper.DormroomMapper;
 import vip.bzsy.service.DormroomService;
@@ -17,4 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DormroomServiceImpl extends ServiceImpl<DormroomMapper, Dormroom> implements DormroomService {
 
+    @Autowired
+    private DormroomMapper dormroomMapper;
+
+    @Override
+    @Transactional
+    public void removeMember(Integer uid, Integer roomId) {
+        dormroomMapper.removeMember(roomId);
+        dormroomMapper.setRommNullByUid(uid);
+    }
 }

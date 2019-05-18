@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lyf
- * @since 2019-04-26
+ * @since 2019-05-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -34,9 +34,10 @@ public class User extends Model<User> {
     private String password;
 
     private Integer room;
-
     @TableLogic
     private Integer deleted;
+
+    private String identity;
 
 
     @Override

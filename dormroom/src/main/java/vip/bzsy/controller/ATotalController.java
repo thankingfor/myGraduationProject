@@ -18,6 +18,7 @@ import vip.bzsy.model.vo.SurveyVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,7 @@ public class ATotalController extends BaseController {
         map.put("uid", user.getId());
         map.put("name", user.getName());
         map.put("account", user.getAccount());
+        map.put("identity", user.getIdentity());
         if (user.getRoom()==null)
             map.put("room", "");
         else
@@ -140,7 +142,8 @@ public class ATotalController extends BaseController {
         Claims claims = (Claims) request.getAttribute("CLAIMS");
         Integer userId = (Integer) claims.get("userId");
         Survey survey = surveyService.getOne(new QueryWrapper<Survey>().eq("uid", userId));
-        List<Dormroom> dormrooms = dormroomService.list(new QueryWrapper<Dormroom>().lt("peopleNum", 6));
+        //List<Dormroom> dormrooms = dormroomService.list(new QueryWrapper<Dormroom>().lt("peopleNum", 6));
+        List<Dormroom> dormrooms = dormroomService.list();
         List<DormFilterVo> vos = dormrooms.stream()
                 .filter(dormroom -> isGetUp(dormroom.getGetUpTime(), survey.getGetUpTime()) && isGetUp(dormroom.getSleepTime(), survey.getSleepTime()))
                 .map(dormroom -> {
@@ -308,6 +311,72 @@ public class ATotalController extends BaseController {
                 return CommonResponse.fail("评论添加失败");
             }
         }
+        return CommonResponse.success();
+    }
+
+    /**
+     * 3.1 获取用户列表
+     * url: /getUserList GET
+     */
+    @RequestMapping(value = "/getUserList", method = RequestMethod.GET)
+    public CommonResponse getUserList() {
+        List<User> list = userService.list();
+        return CommonResponse.success(list);
+    }
+
+    /**
+     * 3.2 修改用户信息
+     * url: /modifyUserInfo POST
+     */
+    @RequestMapping(value = "/modifyUserInfo", method = RequestMethod.POST)
+    public CommonResponse modifyUserInfo(@RequestBody User user) {
+        if (CommonUtils.isNotEmpty(user.getPassword()))
+            user.setPassword(Md5Utils.encryptPassword(user.getPassword(), SALT, PASS_COUNT));
+        boolean b = user.updateById();
+        if (!b){
+            return CommonResponse.fail("修改用户失败");
+        }
+        return CommonResponse.success();
+    }
+
+    /**
+     * 3.4 获取宿舍列表
+     * url: /getRoomList GET
+     */
+    @RequestMapping(value = "/getRoomList", method = RequestMethod.GET)
+    public CommonResponse getRoomList() {
+        List<Dormroom> list = dormroomService.list();
+        map.clear();
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        list.stream().forEach(room->{
+            Map<String,Object> maps  =  new HashMap<>();
+            maps.put("id",room.getId());
+            maps.put("getUpTime",SurveyVo.StringtoArray(room.getGetUpTime()));
+            maps.put("sleepTime",SurveyVo.StringtoArray(room.getSleepTime()));
+            mapList.add(maps);
+        });
+        return CommonResponse.success(mapList);
+    }
+
+    /**
+     * 3.3 删除用户信息
+     * url: /c GET
+     */
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public CommonResponse deleteUser(User user) {
+        user.deleteById();
+        return CommonResponse.success();
+    }
+
+    /**
+     * 3.5 成员移出宿舍
+     * url: /removeMember POST
+     */
+    @RequestMapping(value = "/removeMember", method = RequestMethod.POST)
+    public CommonResponse removeMember(@RequestBody Map<String,Integer> maps) {
+        Integer uid = maps.get("uid");
+        Integer roomId = maps.get("roomId");
+        dormroomService.removeMember(uid,roomId);
         return CommonResponse.success();
     }
 

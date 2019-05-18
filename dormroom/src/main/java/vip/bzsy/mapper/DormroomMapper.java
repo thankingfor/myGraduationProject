@@ -1,5 +1,6 @@
 package vip.bzsy.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import vip.bzsy.model.Dormroom;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface DormroomMapper extends BaseMapper<Dormroom> {
 
+    void setRommNullByUid(@Param("uid") Integer uid);
+
+    void removeMember(@Param("roomId") Integer roomId);
 }

@@ -10,11 +10,12 @@
         <result column="password" property="password" />
         <result column="room" property="room" />
         <result column="deleted" property="deleted" />
+        <result column="identity" property="identity" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, account, password, room, deleted
+        id, name, account, password, room, deleted, identity
     </sql>
 
 </mapper>
