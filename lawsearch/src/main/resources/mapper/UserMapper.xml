@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.lowsearce.mapper.UserMapper">
+
+
+    <!--List<FeedBackVO> findBackByAccount(String account);-->
+    <select id="findBackByAccount" resultType="vip.bzsy.lowsearce.model.vo.FeedBackVO">
+        SELECT  feedbackMsg msg FROM `feedback`
+        WHERE account = #{account}
+    </select>
+
+    <!--List<User> searchUSER(SearchUserRequest searchUserRequest);-->
+    <select id="searchUSER" resultType="vip.bzsy.lowsearce.model.vo.SearchUserResponse">
+        SELECT u.id uid , u.`name` `name`  ,u.identity `identity` , u.account account ,
+        u.email email , u.phone phone , u.loginCount loginCount
+        FROM  `user` u
+        WHERE u.identity = #{searchIdentity}
+        <if test="searchWay=='name'"> AND u.name = #{key} </if>
+        <if test="searchWay=='account'"> AND u.account = #{key} </if>
+    </select>
+
+    <resultMap id="SearchUserVoMap" type="vip.bzsy.lowsearce.model.vo.SearchUserResponse">
+        <id column="uid" property="uid"/>
+        <id column="name" property="name"/>
+        <id column="identity" property="identity"/>
+        <id column="account" property="account"/>
+        <id column="email" property="email"/>
+        <id column="phone" property="phone"/>
+        <id column="loginCount" property="loginCount"/>
+        <!--其他字段不写的话会默认封装-->
+        <collection property="feedback" ofType="vip.bzsy.lowsearce.model.vo.FeedBackVO">
+            <result property="msg" column="msg"/>
+        </collection>
+    </resultMap>
+
+    <!--List<SearchUserResponse> searchUser(SearchUserRequest searchUserRequest);-->
+    <select id="searchUser" resultMap="SearchUserVoMap">
+        SELECT u.id uid , u.`name` `name`  ,u.identity `identity` , u.account account ,
+        u.email email , u.phone phone , u.loginCount loginCount , f.feedbackMsg msg
+        FROM  `user` u LEFT  JOIN feedback f
+        ON f.account = u.account
+        WHERE u.identity = #{searchIdentity}
+        <if test="searchWay=='name'"> AND u.name = #{key} </if>
+        <if test="searchWay=='account'"> AND u.account = #{key} </if>
+    </select>
+
+    <!--User selectByAccount(String account);-->
+    <select id="selectByAccount" resultType="vip.bzsy.lowsearce.model.User">
+          SELECT * FROM `user`
+          WHERE account = #{account}
+    </select>
+    <!--User selectById(Integer id);-->
+    <select id="selectById" resultType="vip.bzsy.lowsearce.model.User">
+        SELECT * FROM `user`
+        WHERE id = #{id}
+    </select>
+    
+    <!--int add(User user);-->
+    <insert id="add">
+        INSERT  INTO `user`
+        (`name`,account,email,phone,password,`identity`)
+        VALUES
+        (#{name},#{account},#{email},#{phone},#{password},#{identity})
+    </insert>
+
+    <!--int addFeedBack(FeedBack feedBack);-->
+    <insert id="addFeedBack">
+        INSERT  INTO `feedback`
+        (`feedbackMsg`,`account`)
+        VALUES
+        (#{feedbackMsg},#{account})
+    </insert>
+
+    <!--int updatePwd(String newPwd,integer id);-->
+    <update id="updatePwd" >
+        UPDATE `user` SET
+        password = #{newPwd}
+        WHERE id = #{id}
+    </update>
+
+    <!--int updateUser(User user);-->
+    <update id="updateUser" >
+        UPDATE `user`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">`name`=#{name},</if>
+            <if test="email!=null">email=#{email},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="identity!=null">identity=#{identity},</if>
+            <if test="loginCount!=null">loginCount=#{loginCount},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <!--int deleteUser(Integer userId);-->
+    <delete id="deleteUser" >
+        DELETE FROM `user`
+        WHERE id = #{userId}
+    </delete>
+</mapper>

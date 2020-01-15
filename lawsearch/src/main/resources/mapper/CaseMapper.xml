@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.lowsearce.mapper.CaseMapper">
+
+    <!--int alterCase(@Param("map") Map<String, Object> jsonmap);-->
+    <update id="alterCase" >
+        UPDATE `case`
+        <set >
+            <if test="map.account != null" >
+                account = #{map.account},
+            </if>
+            <if test="map.name != null" >
+                `name` = #{map.name},
+            </if>
+            <if test="map.title != null" >
+                title = #{map.title},
+            </if>
+            <if test="map.section != null" >
+                `section` = #{map.section},
+            </if>
+            <if test="map.content != null" >
+                `content` = #{map.content},
+            </if>
+            <if test="map.commitTime != null" >
+                `commitTime` = FROM_UNIXTIME(#{map.commitTime}/1000),
+            </if>
+            <if test="map.sort != null" >
+                <if test="map.sort.brief != null" >
+                    `brief` = #{map.sort.brief},
+                </if>
+                <if test="map.sort.caseLevel != null" >
+                    `caseLevel` = #{map.sort.caseLevel},
+                </if>
+                <if test="map.sort.court != null" >
+                    `court` = #{map.sort.court},
+                </if>
+            </if>
+            <if test="map.tag != null" >
+                <if test="map.tag.procedure != null" >
+                    `procedure` = #{map.tag.procedure},
+                </if>
+                <if test="map.tag.courtLevel != null" >
+                    `courtLevel` = #{map.tag.courtLevel},
+                </if>
+                <if test="map.tag.instrument != null" >
+                    `instrument` = #{map.tag.instrument},
+                </if>
+                <if test="map.tag.closingTime != null" >
+                    `closingTime` = FROM_UNIXTIME(#{map.tag.closingTime}/1000),
+                </if>
+                <if test="map.tag.topic != null" >
+                    `topic` = #{map.tag.topic},
+                </if>
+            </if>
+        </set>
+        WHERE id = #{map.caseid}
+    </update>
+
+    <!--int deleteCase(Integer id);-->
+    <delete id="deleteCase" >
+        DELETE FROM `case`
+        WHERE id = #{id}
+    </delete>
+
+    <!--List<CaseSearch> getCommitCase(GetCommitCaseRequest caseRequest);-->
+    <select id="getCommitCase" resultType="vip.bzsy.lowsearce.model.vo.CaseSearch">
+        SELECT * FROM `case`
+        WHERE account = #{account}
+        <if test="section!=null" > AND `section` = #{section} </if>
+    </select>
+
+    <!--CaseDetail findById(Integer id);-->
+    <select id="findById" resultType="vip.bzsy.lowsearce.model.vo.CaseDetail">
+        SELECT * FROM `case`
+        WHERE id = #{id}
+    </select>
+    
+    <!--List<CaseSearch> searchCase(@Param("map") Map<String, Object> jsonmap);-->
+    <select id="searchCase" resultType="vip.bzsy.lowsearce.model.vo.CaseSearch">
+        SELECT id , title, brief ,caseLevel ,court ,commitTime FROM `case`
+        WHERE 1 = 1
+        <if test="map.section!=null"> and `section` = #{map.section} </if>
+        <if test="map.search!=null">
+            <if test='map.search=="title"'> and `title` LIKE "%"#{map.key}"%"  </if>
+            <if test='map.search=="article"'> and ( `title` LIKE "%"#{map.key}"%" or `content` LIKE "%"#{map.key}"%" ) </if>
+        </if>
+        <if test="map.sort!=null">
+            <if test="map.sort.brief!=null"> AND `brief` = #{map.sort.brief} </if>
+            <if test="map.sort.caseLevel!=null"> AND `caseLevel` = #{map.sort.caseLevel} </if>
+            <if test="map.sort.court!=null"> AND `court` = #{map.sort.court} </if>
+        </if>
+        <if test="map.tag!=null">
+            <if test="map.tag.courtLevel!=null"> AND `courtLevel` = #{map.tag.courtLevel} </if>
+            <if test="map.tag.procedure!=null"> AND `procedure` = #{map.tag.procedure} </if>
+            <if test="map.tag.instrument!=null"> AND `instrument` = #{map.tag.instrument} </if>
+            <if test="map.tag.topic!=null"> AND `topic` = #{map.tag.topic} </if>
+            <if test="map.tag.commitTime!=null">
+                <choose>
+                    <when test='map.tag.commitTime=="一月内"'> AND DATE_SUB(now(), INTERVAL 30 DAY) &lt;= commitTime </when>
+                    <when test='map.tag.commitTime=="三月内"'> AND DATE_SUB(now(), INTERVAL 90 DAY) &lt;= commitTime </when>
+                    <when test='map.tag.commitTime=="半年内"'> AND DATE_SUB(now(), INTERVAL 180 DAY) &lt;= commitTime </when>
+                    <when test='map.tag.commitTime=="一年内"'> AND DATE_SUB(now(), INTERVAL 360 DAY) &lt;= commitTime </when>
+                    <otherwise>
+                        AND FROM_UNIXTIME(#{map.startCommitTime}/1000) &lt;= commitTime AND commitTime &lt;= FROM_UNIXTIME(#{map.endCommitTime}/1000)
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="map.tag.closingTime!=null">
+                <choose>
+                    <when test='map.tag.closingTime=="一月内"'> AND DATE_SUB(now(), INTERVAL 30 DAY) &lt;= closingTime </when>
+                    <when test='map.tag.closingTime=="三月内"'> AND DATE_SUB(now(), INTERVAL 90 DAY) &lt;= closingTime </when>
+                    <when test='map.tag.closingTime=="半年内"'> AND DATE_SUB(now(), INTERVAL 180 DAY) &lt;= closingTime </when>
+                    <when test='map.tag.closingTime=="一年内"'> AND DATE_SUB(now(), INTERVAL 360 DAY) &lt;= closingTime </when>
+                    <otherwise>
+                        AND FROM_UNIXTIME(#{map.startClosingTime}/1000) &lt;= closingTime AND closingTime &lt;= FROM_UNIXTIME(#{map.endClosingTime}/1000)
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </select>
+
+    <!--int commitCase(@Param("map") Map<String, Object> map);-->
+    <insert id="commitCase" >
+        INSERT INTO `case`
+        (title,account,`name`,content,commitTime,brief,caseLevel,
+        court,`procedure`,courtLevel,instrument,closingTime,
+        `section`,`topic`)
+        VALUES
+        (#{map.title},#{map.account},#{map.name},#{map.content},FROM_UNIXTIME(#{map.commitTime}/1000),#{map.sort.brief},#{map.sort.caseLevel}
+        ,#{map.sort.court},#{map.tag.procedure},#{map.tag.courtLevel},#{map.tag.instrument},FROM_UNIXTIME(#{map.tag.closingTime}/1000),
+        #{map.section},#{map.tag.topic})
+    </insert>
+</mapper>

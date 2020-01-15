@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bzsy.lowsearce.mapper.SysMapper">
+
+    <!--List<Sys> getListByKey(String key);-->
+    <select id="getListByKey" resultType="vip.bzsy.lowsearce.model.Sys">
+        SELECT * FROM `sys`
+        WHERE `key` = #{key}
+    </select>
+
+    <!--List<SideBar> getSideBar(String key);-->
+    <select id="getSideBar" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT a.${key} title ,COUNT(a.id) count FROM
+        sys s,law a
+        WHERE s.`key` = #{key} AND s.`value` = a.${key}
+        GROUP BY a.${key}
+    </select>
+
+    <!--List<SideBar> getSidebarInSearch(@Param("keys") String key,@Param("law") LawSearch lawSearch);-->
+    <select id="getSidebarInSearch" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT a.${keys} title ,COUNT(a.id) count FROM
+        sys s,law a
+        WHERE 1=1 and s.`key` = #{keys} AND s.`value` = a.${keys}
+        <if test="law.level!=null"> and a.`level` LIKE "%"#{law.level}"%" </if>
+        <if test="law.department!=null"> and a.department LIKE "%"#{law.department}"%" </if>
+        <if test="law.lowSort!=null"> and  a.lowSort LIKE "%"#{law.lowSort}"%" </if>
+        <if test="law.time!=null">
+            <if test="law.time==3"> and  a.isInvalid = 1 </if>
+            <if test="law.time==4"> and  a.isInvalidPart = 1 </if>
+            <if test="law.time==5"> and  a.isAlter = 1 </if>
+            <if test="law.time==1"> and  a.carryTime &lt;= now()  </if>
+            <if test="law.time==2"> and  a.carryTime &gt; now() </if>
+        </if>
+        <if test="law.search!=null">
+            <if test="law.search==1"> and  a.title LIKE "%"#{law.key}"%"  </if>
+            <if test="law.search==2"> and ( a.title LIKE "%"#{law.key}"%" OR a.content LIKE "%"#{law.key}"%" )  </if>
+        </if>
+        <if test="law.filter!=null">
+            and a.filter in
+            <foreach collection="law.filter"  item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY a.${keys}
+    </select>
+
+    <!--SideBar getSidebarInSearchTime(@Param("time") int i,@Param("law") LawSearch lawSearch);-->
+    <select id="getSidebarInSearchTime" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE 1=1
+
+        <if test="time==1"> and  carryTime &lt;= now() and isInvalid = 0 and isInvalidPart = 0 and isAlter = 0 </if>
+        <if test="time==2"> and  carryTime &gt; now()  and isInvalid = 0 and isInvalidPart = 0 and isAlter = 0 </if>
+        <if test="time==3"> and  isInvalid = 1 </if>
+        <if test="time==4"> and  isInvalidPart = 1 </if>
+        <if test="time==5"> and  isAlter = 1 </if>
+        <if test="law.level!=null"> and `level` LIKE "%"#{law.level}"%" </if>
+        <if test="law.department!=null"> and department LIKE "%"#{law.department}"%" </if>
+        <if test="law.lowSort!=null"> and  lowSort LIKE "%"#{law.lowSort}"%" </if>
+        <if test="law.time!=null">
+            <if test="law.time==3"> and  isInvalid = 1 </if>
+            <if test="law.time==4"> and  isInvalidPart = 1 </if>
+            <if test="law.time==5"> and  isAlter = 1 </if>
+            <if test="law.time==1"> and  carryTime &lt;= now()  </if>
+            <if test="law.time==2"> and  carryTime &gt; now() </if>
+        </if>
+        <if test="law.search!=null">
+            <if test="law.search==1"> and  title LIKE "%"#{law.key}"%"  </if>
+            <if test="law.search==2"> and ( title LIKE "%"#{law.key}"%" OR content LIKE "%"#{law.key}"%" )  </if>
+        </if>
+        <if test="law.filter!=null">
+            and filter in
+            <foreach collection="law.filter"  item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!--List<SideBar> getSidebarInCaseSearch(@Param("keys") String key, @Param("map") Map<String, Object> jsonmap);-->
+    <select id="getSidebarInCaseSearch" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT a.${keys} title ,COUNT(a.id) count FROM
+        sys s, `case` a
+        WHERE 1=1 and s.`key` = #{keys} AND s.`value` = a.${keys}
+        <if test="map.section!=null"> and a.`section` = #{map.section} </if>
+        <if test="map.search!=null">
+            <if test='map.search=="title"'> and a.`title` LIKE "%"#{map.key}"%"  </if>
+            <if test='map.search=="article"'> and ( a.`title` LIKE "%"#{map.key}"%" or a.`content` LIKE "%"#{map.key}"%" ) </if>
+        </if>
+        <if test="map.sort!=null">
+            <if test="map.sort.brief!=null"> AND a.`brief` = #{map.sort.brief} </if>
+            <if test="map.sort.caseLevel!=null"> AND a.`caseLevel` = #{map.sort.caseLevel} </if>
+            <if test="map.sort.court!=null"> AND a.`court` = #{map.sort.court} </if>
+        </if>
+        <if test="map.tag!=null">
+            <if test="map.tag.courtLevel!=null"> AND a.`courtLevel` = #{map.tag.courtLevel} </if>
+            <if test="map.tag.procedure!=null"> AND a.`procedure` = #{map.tag.procedure} </if>
+            <if test="map.tag.instrument!=null"> AND a.`instrument` = #{map.tag.instrument} </if>
+            <if test="map.tag.topic!=null"> AND a.`topic` = #{map.tag.topic} </if>
+            <if test="map.tag.commitTime!=null">
+                <choose>
+                    <when test='map.tag.commitTime=="一月内"'> AND DATE_SUB(now(), INTERVAL 30 DAY) &lt;= a.commitTime </when>
+                    <when test='map.tag.commitTime=="三月内"'> AND DATE_SUB(now(), INTERVAL 90 DAY) &lt;= a.commitTime </when>
+                    <when test='map.tag.commitTime=="半年内"'> AND DATE_SUB(now(), INTERVAL 180 DAY) &lt;= a.commitTime </when>
+                    <when test='map.tag.commitTime=="一年内"'> AND DATE_SUB(now(), INTERVAL 360 DAY) &lt;= a.commitTime </when>
+                    <otherwise>
+                        AND FROM_UNIXTIME(#{map.startCommitTime}/1000) &lt;= a.commitTime AND a.commitTime &lt;= FROM_UNIXTIME(#{map.endCommitTime}/1000)
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="map.tag.closingTime!=null">
+                <choose>
+                    <when test='map.tag.closingTime=="一月内"'> AND DATE_SUB(now(), INTERVAL 30 DAY) &lt;= a.closingTime </when>
+                    <when test='map.tag.closingTime=="三月内"'> AND DATE_SUB(now(), INTERVAL 90 DAY) &lt;= a.closingTime </when>
+                    <when test='map.tag.closingTime=="半年内"'> AND DATE_SUB(now(), INTERVAL 180 DAY) &lt;= a.closingTime </when>
+                    <when test='map.tag.closingTime=="一年内"'> AND DATE_SUB(now(), INTERVAL 360 DAY) &lt;= a.closingTime </when>
+                    <otherwise>
+                        AND FROM_UNIXTIME(#{map.startClosingTime}/1000) &lt;= a.closingTime AND a.closingTime &lt;= FROM_UNIXTIME(#{map.endClosingTime}/1000)
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+        GROUP BY a.${keys}
+    </select>
+    
+    <!--SideBar isNowInvalid(); 现行有效-->
+    <select id="isNowInvalid" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE  carryTime &lt;= now()
+    </select>
+
+    <!--SideBar isNowInvalid(); 尚未生效-->
+    <select id="isNoInvalid" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE  carryTime &gt; now()
+    </select>
+
+    <!--SideBar isAlter(); 已被修改-->
+    <select id="isAlter" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE  isAlter = 1
+    </select>
+
+    <!--SideBar isInvalid(); 失效-->
+    <select id="isInvalid" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE  isInvalid = 1
+    </select>
+
+    <!--SideBar isInvalidPart(); 部分失效-->
+    <select id="isInvalidPart" resultType="vip.bzsy.lowsearce.model.vo.SideBar">
+        SELECT count(id) `count` FROM `law`
+        WHERE  isInvalidPart = 1
+    </select>
+
+</mapper>
